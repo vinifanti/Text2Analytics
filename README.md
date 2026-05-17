@@ -2,6 +2,8 @@
 
 Consulte dados de vendas em linguagem natural. Faça uma pergunta em português e receba a resposta com base em queries SQL geradas e executadas automaticamente.
 
+Disponível em dois modos: **aplicação web** (interface de chat no browser) e **CLI** (REPL no terminal).
+
 ## Como funciona
 
 ```
@@ -38,7 +40,8 @@ Pergunta do usuário
 
 | Módulo | Responsabilidade |
 |---|---|
-| `app.py` | Entry point CLI; loop de conversa |
+| `app.py` | Entry point CLI + função `build_app_components()` compartilhada com o servidor |
+| `server.py` | Servidor FastAPI: API REST de chat + serve o frontend estático |
 | `agent.py` | Constrói o AgentExecutor ReAct (LangChain) |
 | `context_retriever.py` | Embeddings semânticos para schema-linking e few-shot retrieval |
 | `sql_executor.py` | Execução segura de SQL + loop de auto-correção |
@@ -59,18 +62,15 @@ Pergunta do usuário
 git clone <url-do-repositorio>
 cd Text2Analytics
 
-# 2. Crie e ative um ambiente virtual
-python -m venv .venv
-source .venv/bin/activate  # Linux/macOS
-# .venv\Scripts\activate   # Windows
+# 2. Crie e ative um ambiente virtual dentro de src/
+python -m venv src/.venv
+source src/.venv/bin/activate  # Linux/macOS
+# src\.venv\Scripts\activate   # Windows
 
 # 3. Instale as dependências
 pip install -r src/requirements.txt
 
 # 4. Configure as variáveis de ambiente (veja seção abaixo)
-
-# 5. Execute — o banco de dados é criado automaticamente na primeira execução
-python src/app.py
 ```
 
 ## Configuração
@@ -78,7 +78,7 @@ python src/app.py
 Copie o arquivo de exemplo e preencha com sua chave:
 
 ```bash
-cp .env
+cp .env.example .env
 ```
 
 Edite `.env`:
@@ -91,6 +91,17 @@ O arquivo `.env` está no `.gitignore` e nunca deve ser commitado.
 
 ## Uso
 
+### Modo web (recomendado)
+
+```bash
+cd src
+uvicorn server:app --reload
+```
+
+Acesse `http://localhost:8000` no browser. O banco de dados é criado automaticamente na primeira execução. O histórico de conversa persiste durante a sessão da aba.
+
+### Modo CLI
+
 ```bash
 # Execução padrão
 python src/app.py
@@ -102,7 +113,7 @@ python src/app.py --model claude-sonnet-4-6
 python src/app.py --verbose
 ```
 
-**Exemplo de sessão:**
+**Exemplo de sessão CLI:**
 
 ```
 ============================================================
@@ -131,8 +142,6 @@ Até logo!
 
 ## Exemplos de perguntas
 
-O sistema responde perguntas em português sobre os dados de vendas:
-
 - "Qual o total de vendas por região?"
 - "Quais os 5 produtos mais vendidos em quantidade?"
 - "Qual o faturamento total por categoria?"
@@ -147,8 +156,14 @@ O sistema responde perguntas em português sobre os dados de vendas:
 ```
 Text2Analytics/
 ├── README.md
+├── .env.example
+├── frontend/
+│   ├── index.html          # Interface web de chat
+│   ├── style.css           # Estilos da UI
+│   └── chat.js             # Lógica de chat (session, fetch, loading)
 ├── src/
-│   ├── app.py              # Entry point CLI
+│   ├── app.py              # Entry point CLI + build_app_components()
+│   ├── server.py           # Servidor FastAPI (web)
 │   ├── requirements.txt
 │   ├── seed.py             # Criação e população do banco de exemplo
 │   ├── sql_executor.py     # Execução de queries + loop de auto-correção

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Text2Analytics</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>Text2Analytics</h1>
+      <p>Consulte seus dados em linguagem natural</p>
+    </header>
+
+    <main id="chat-history" aria-live="polite" aria-label="Histórico de conversa"></main>
+
+    <footer id="input-area">
+      <form id="chat-form" autocomplete="off">
+        <input
+          type="text"
+          id="message-input"
+          placeholder="Faça uma pergunta sobre seus dados..."
+          aria-label="Mensagem"
+          autofocus
+        />
+        <button type="submit" id="send-btn">Enviar</button>
+      </form>
+    </footer>
+  </div>
+
+  <script src="/chat.js"></script>
+</body>
+</html>

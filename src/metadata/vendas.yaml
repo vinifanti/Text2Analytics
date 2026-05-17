@@ -1,0 +1,20 @@
+clientes:
+  columns:
+    cidade: Coluna cidade (TEXT)
+    estado: Coluna estado (TEXT)
+    id: Coluna id (INTEGER)
+    nome: Coluna nome (TEXT)
+    segmento: Coluna segmento (TEXT)
+  description: Tabela clientes
+pedidos:
+  columns:
+    categoria: Coluna categoria (TEXT)
+    cliente_id: Coluna cliente_id (INTEGER)
+    data_pedido: Coluna data_pedido (TEXT)
+    id: Coluna id (INTEGER)
+    produto: Coluna produto (TEXT)
+    quantidade: Coluna quantidade (INTEGER)
+    regiao: Coluna regiao (TEXT)
+    status: Coluna status (TEXT)
+    valor: Coluna valor (REAL)
+  description: Tabela pedidos

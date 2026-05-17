@@ -1,0 +1,10 @@
+langchain
+langchain-community
+langchain-core
+langchain-anthropic
+sentence-transformers
+sqlparse
+pandas
+numpy
+tabulate
+python-dotenv

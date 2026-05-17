@@ -20,6 +20,25 @@ METADATA_PATH = Path("metadata")
 EXAMPLES_PATH = Path("examples/few_shot.yaml")
 
 
+def build_app_components(model: str = "claude-haiku-4-5-20251001", verbose: bool = False) -> dict:
+    DB_PATH.parent.mkdir(parents=True, exist_ok=True)
+    init_database(str(DB_PATH))
+
+    metadata = load_metadata(str(DB_PATH), str(METADATA_PATH))
+    llm = ChatAnthropic(model=model)
+
+    retriever = ContextRetriever(
+        metadata=metadata,
+        db_path=str(DB_PATH),
+        examples_path=str(EXAMPLES_PATH),
+    )
+
+    tools = make_tools(llm, str(DB_PATH), retriever)
+    agent = build_agent(llm, tools, verbose=verbose)
+
+    return {"llm": llm, "retriever": retriever, "tools": tools, "agent": agent}
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Text2Analytics — consulte dados em linguagem natural")
     parser.add_argument("--model", default="claude-haiku-4-5-20251001", help="Modelo Claude a usar")
@@ -31,27 +50,15 @@ def main() -> None:
     else:
         logging.basicConfig(level=logging.WARNING)
 
-    DB_PATH.parent.mkdir(parents=True, exist_ok=True)
+    components = build_app_components(model=args.model, verbose=args.verbose)
+    agent = components["agent"]
+    llm = components["llm"]
 
     criado = init_database(str(DB_PATH))
     if criado:
         print("Banco de dados criado com dados de exemplo.")
     else:
         print(f"Banco de dados encontrado: {DB_PATH}")
-
-    metadata = load_metadata(str(DB_PATH), str(METADATA_PATH))
-
-    print("Inicializando agente...")
-    llm = ChatAnthropic(model=args.model)
-
-    retriever = ContextRetriever(
-        metadata=metadata,
-        db_path=str(DB_PATH),
-        examples_path=str(EXAMPLES_PATH),
-    )
-
-    tools = make_tools(llm, str(DB_PATH), retriever)
-    agent = build_agent(llm, tools, verbose=args.verbose)
 
     memory = ConversationMemory(llm)
     memory.connected_db = str(DB_PATH)

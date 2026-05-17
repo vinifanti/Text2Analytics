@@ -8,3 +8,6 @@ pandas
 numpy
 tabulate
 python-dotenv
+fastapi
+uvicorn[standard]
+python-multipart

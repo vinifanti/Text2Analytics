@@ -1,0 +1,47 @@
+- question: "Qual o total de vendas por região?"
+  sql: "SELECT regiao, SUM(valor * quantidade) AS total_vendas FROM pedidos WHERE status = 'entregue' GROUP BY regiao ORDER BY total_vendas DESC"
+  domain: "agregacao"
+
+- question: "Quantos pedidos foram feitos em março de 2024?"
+  sql: "SELECT COUNT(*) AS total_pedidos FROM pedidos WHERE data_pedido LIKE '2024-03-%'"
+  domain: "filtro_temporal"
+
+- question: "Quais os 5 produtos mais vendidos em quantidade?"
+  sql: "SELECT produto, SUM(quantidade) AS total_quantidade FROM pedidos WHERE status = 'entregue' GROUP BY produto ORDER BY total_quantidade DESC LIMIT 5"
+  domain: "ranking"
+
+- question: "Qual o faturamento total por categoria?"
+  sql: "SELECT categoria, SUM(valor * quantidade) AS faturamento FROM pedidos WHERE status = 'entregue' GROUP BY categoria ORDER BY faturamento DESC"
+  domain: "agregacao"
+
+- question: "Quais clientes compraram mais de R$ 10.000 em pedidos entregues?"
+  sql: "SELECT c.nome, SUM(p.valor * p.quantidade) AS total FROM pedidos p JOIN clientes c ON p.cliente_id = c.id WHERE p.status = 'entregue' GROUP BY c.id, c.nome HAVING total > 10000 ORDER BY total DESC"
+  domain: "join"
+
+- question: "Quantos pedidos foram cancelados por região?"
+  sql: "SELECT regiao, COUNT(*) AS pedidos_cancelados FROM pedidos WHERE status = 'cancelado' GROUP BY regiao"
+  domain: "filtro_status"
+
+- question: "Qual o ticket médio dos pedidos entregues?"
+  sql: "SELECT AVG(valor * quantidade) AS ticket_medio FROM pedidos WHERE status = 'entregue'"
+  domain: "agregacao"
+
+- question: "Liste os clientes do segmento Varejo com seus estados."
+  sql: "SELECT nome, cidade, estado FROM clientes WHERE segmento = 'Varejo' ORDER BY estado, nome"
+  domain: "filtro_clientes"
+
+- question: "Qual o total de vendas de Eletrônicos em fevereiro de 2024?"
+  sql: "SELECT SUM(valor * quantidade) AS total FROM pedidos WHERE categoria = 'Eletrônicos' AND data_pedido LIKE '2024-02-%' AND status = 'entregue'"
+  domain: "filtro_temporal"
+
+- question: "Quais os clientes que fizeram pedidos na região Sudeste?"
+  sql: "SELECT DISTINCT c.nome, c.cidade, c.estado FROM clientes c JOIN pedidos p ON c.id = p.cliente_id WHERE p.regiao = 'Sudeste'"
+  domain: "join"
+
+- question: "Qual o produto mais caro vendido por categoria?"
+  sql: "SELECT categoria, produto, MAX(valor) AS maior_valor FROM pedidos GROUP BY categoria"
+  domain: "ranking"
+
+- question: "Quantos pedidos entregues houve por mês?"
+  sql: "SELECT strftime('%Y-%m', data_pedido) AS mes, COUNT(*) AS total FROM pedidos WHERE status = 'entregue' GROUP BY mes ORDER BY mes"
+  domain: "filtro_temporal"

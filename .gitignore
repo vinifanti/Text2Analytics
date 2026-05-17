@@ -1,0 +1,25 @@
+# Banco de dados
+data/*.db
+
+# Credenciais e variáveis de ambiente
+.env
+.env.example
+# Tooling Claude Code / OpenSpec (não subir ao GitHub)
+.claude/
+openspec/
+CLAUDE.md
+
+# Editor
+.vscode/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+src/.venv/
+*.egg-info/
+dist/
+build/
+
+# macOS
+.DS_Store

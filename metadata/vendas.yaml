@@ -1,0 +1,21 @@
+pedidos:
+  description: "Tabela de pedidos de venda realizados por clientes. Cada linha representa um item de pedido com produto, valor, quantidade e informações de entrega."
+  columns:
+    id: "Identificador único do pedido (chave primária)."
+    cliente_id: "Referência ao cliente que realizou o pedido (chave estrangeira para a tabela clientes)."
+    produto: "Nome do produto vendido, como 'Notebook Pro', 'Mouse Sem Fio', etc."
+    categoria: "Categoria do produto. Valores possíveis: 'Eletrônicos', 'Periféricos', 'Móveis'."
+    valor: "Valor unitário do produto em reais (R$). Representa o preço de um único item."
+    quantidade: "Quantidade de unidades do produto no pedido."
+    data_pedido: "Data em que o pedido foi realizado, no formato YYYY-MM-DD."
+    status: "Status atual do pedido. Valores possíveis: 'entregue', 'cancelado', 'pendente'."
+    regiao: "Região geográfica do Brasil onde o pedido foi entregue. Valores: 'Sul', 'Sudeste', 'Nordeste', 'Norte', 'Centro-Oeste'."
+
+clientes:
+  description: "Cadastro de clientes da empresa. Cada linha representa um cliente com informações de localização e segmento de mercado."
+  columns:
+    id: "Identificador único do cliente (chave primária)."
+    nome: "Razão social ou nome fantasia do cliente."
+    cidade: "Cidade onde o cliente está localizado."
+    estado: "Sigla do estado brasileiro onde o cliente está localizado, como 'SP', 'RJ', 'MG'."
+    segmento: "Segmento de mercado do cliente. Valores: 'Varejo', 'Atacado', 'Distribuidor', 'Indústria'."

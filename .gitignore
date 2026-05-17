@@ -3,7 +3,6 @@ data/*.db
 
 # Credenciais e variáveis de ambiente
 .env
-.env.example
 # Tooling Claude Code / OpenSpec (não subir ao GitHub)
 .claude/
 openspec/
